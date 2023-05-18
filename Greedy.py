@@ -14,7 +14,7 @@ def greedyByPrice(filename, budget, totalparticipant, listAvoidIngredient,max):
     totalprice = 0
     maxnow = max
 
-    listpricesort = sortarray(listprice)
+    listpricesort = sortarrayasc(listprice)
     i = 0
     while(totalparticipant > 0 and totalprice < budget):
         menu = listpricesort[i][0]
@@ -41,16 +41,19 @@ def greedyByPrice(filename, budget, totalparticipant, listAvoidIngredient,max):
         result = removeLastElement(result)
     return result, totalprice
 
-def greedyByRating(filename, totalparticipant, listAvoidIngredient,max):
+def greedyByRating(filename, budget, totalparticipant, listAvoidIngredient,max):
     result = np.empty((0,2))
     listrating = getRating(filename)
     listbahan = getBahan(filename)
+    listprice = getPrice(filename)
+    totalprice = 0
     meanrating = 0
     maxnow = max
 
-    listratingsort = sortarray(listrating)
+    listratingsort = sortarraydesc(listrating)
+    print(listratingsort)
     i = 0
-    while(totalparticipant > 0):
+    while(totalparticipant > 0 and totalprice < budget):
         menu = listratingsort[i][0]
         #print(f"cek {menu}")
         bahan = getBahanByMenu(listbahan,menu)
@@ -59,6 +62,7 @@ def greedyByRating(filename, totalparticipant, listAvoidIngredient,max):
                 result = addMenu(result,menu)
                 totalparticipant -= 1
                 meanrating = (meanrating*(len(result)-1)+listratingsort[i][1])/(len(result))
+                totalprice += getPriceByMenu(listprice,menu)
                 #print(f"{menu} berhasil ditambahkan")
                 maxnow -=1
                 if (maxnow == 0):
@@ -70,8 +74,119 @@ def greedyByRating(filename, totalparticipant, listAvoidIngredient,max):
         
         if (i>len(listratingsort)-1):
             i = 0
+    if (totalprice > budget):
+        totalprice -= getPriceByMenu(listprice,menu)
+        result = removeLastElement(result)  
+    return result, totalprice, meanrating
+
+def greedyByCalories(filename, budget, totalparticipant, listAvoidIngredient,max):
+    result = np.empty((0,2))
+    listcalories = getCalories(filename)
+    listbahan = getBahan(filename)
+    listprice = getPrice(filename)
+    totalprice = 0
+    totalcalories = 0
+    maxnow = max
+
+    listcaloriessort = sortarrayasc(listcalories)
+    #print(listcaloriessort)
+    i = 0
+    while(totalparticipant > 0 and totalprice < budget):
+        menu = listcaloriessort[i][0]
+        #print(f"cek {menu}")
+        bahan = getBahanByMenu(listbahan,menu)
+        if (bahan != -1):
+            if (fungsikendala(listAvoidIngredient,bahan) == False):
+                result = addMenu(result,menu)
+                totalparticipant -= 1
+                totalcalories += listcaloriessort[i][1]
+                totalprice += getPriceByMenu(listprice,menu)
+                #print(f"{menu} berhasil ditambahkan")
+                maxnow -=1
+                if (maxnow == 0):
+                    maxnow = max
+                    i += 1
+            else:
+                i += 1
+                #print(f"{menu} mengandung bahan yang tak diinginkan")
         
-    return result, meanrating
+        if (i>len(listcaloriessort)-1):
+            i = 0
+    if (totalprice > budget):
+        totalprice -= getPriceByMenu(listprice,menu)
+        result = removeLastElement(result)  
+    return result, totalprice, totalcalories
+
+def greedyByRatingPerPrice(filename, budget, totalparticipant, listAvoidIngredient,max):
+    result = np.empty((0,2))
+    listratio = getRatingPerPrice(filename)
+    listbahan = getBahan(filename)
+    listprice = getPrice(filename)
+    totalprice = 0
+    totalratio = 0
+    maxnow = max
+
+    listratiosort = sortarraydesc(listratio)
+    print(listratiosort)
+    #print(listcaloriessort)
+    i = 0
+    while(totalparticipant > 0 and totalprice < budget):
+        menu = listratiosort[i][0]
+        #print(f"cek {menu}")
+        bahan = getBahanByMenu(listbahan,menu)
+        if (bahan != -1):
+            if (fungsikendala(listAvoidIngredient,bahan) == False):
+                result = addMenu(result,menu)
+                totalparticipant -= 1
+                totalratio += float(listratiosort[i][1])
+                totalprice += getPriceByMenu(listprice,menu)
+                #print(f"{menu} berhasil ditambahkan")
+                maxnow -=1
+                if (maxnow == 0):
+                    maxnow = max
+                    i += 1
+            else:
+                i += 1
+                #print(f"{menu} mengandung bahan yang tak diinginkan")
+        
+        if (i>len(listratiosort)-1):
+            i = 0
+    if (totalprice > budget):
+        totalprice -= getPriceByMenu(listprice,menu)
+        result = removeLastElement(result)  
+    return result, totalprice, totalratio
+
+def randomrecommendation(filename, listAvoidIngredient, budget, max):
+    result = np.empty((0,2))
+    listbahan = getBahan(filename)
+    listprice = getPrice(filename)
+
+    i = 0
+    while(totalparticipant > 0 and totalprice < budget):
+        menu = listprice[i][0]
+        #print(f"cek {menu}")
+        bahan = getBahanByMenu(listbahan,menu)
+        if (bahan != -1):
+            if (fungsikendala(listAvoidIngredient,bahan) == False):
+                result = addMenu(result,menu)
+                totalparticipant -= 1
+                totalprice += getPriceByMenu(listprice,menu)
+                #print(f"{menu} berhasil ditambahkan")
+                maxnow -=1
+                if (maxnow == 0):
+                    maxnow = max
+                    i += 1
+            else:
+                i += 1
+                #print(f"{menu} mengandung bahan yang tak diinginkan")
+        
+        if (i>len(listprice)-1):
+            i = 0
+    if (totalprice > budget):
+        totalprice -= getPriceByMenu(listprice,menu)
+        result = removeLastElement(result)  
+    return result, totalprice
+
         
 def fungsikendala(avoidIngredients,bahan):
     #print(bahan)
@@ -116,3 +231,9 @@ def removeLastElement(listRecommendation):
     else:
         listRecommendation = listRecommendation[:-1]
     return listRecommendation
+
+def getPriceByMenu(listprice,menu):
+    for i in range (0,len(listprice)-1):
+        if (listprice[i][0]==menu):
+            return listprice[i][1]
+    return -1
