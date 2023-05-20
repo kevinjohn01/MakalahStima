@@ -32,5 +32,4 @@ def boyermoore(text,pattern):
                 positionInPattern = patternlen-1
     return -1
 
-#print(boyermoore("aku suka nasi","usuj"))
         

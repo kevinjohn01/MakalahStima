@@ -29,6 +29,13 @@ def getCalories(filename):
     listcalories = data_frame.values
     return listcalories
 
+def getTerjual(filename):
+    directory = os.getcwd() + "\\test\\" + filename + ".xlsx"
+    column = ['Menu','Terjual']
+    data_frame = pd.read_excel(directory,usecols=column)
+    listterjual = data_frame.values
+    return listterjual
+
 def getBahan(filename):
     directory = os.getcwd() + "\\test\\" + filename + ".xlsx"
     column = ['Menu','Bahan']
@@ -36,18 +43,26 @@ def getBahan(filename):
     listbahan = data_frame.values
     return listbahan
 
-def getRatingPerPrice(filename):
+def getPopularity(filename):
     directory = os.getcwd() + "\\test\\" + filename + ".xlsx"
-    column = ['Menu','Harga','Rating']
+    column = ['Menu','Terjual']
+    data_frame = pd.read_excel(directory,usecols=column)
+    listorigin = data_frame.values
+
+    return listorigin
+
+def getAll(filename):
+    directory = os.getcwd() + "\\test\\" + filename + ".xlsx"
+    column = ['Menu','Harga','Rating','Terjual']
     data_frame = pd.read_excel(directory,usecols=column)
     listorigin = data_frame.values
 
     listresult= np.empty((0,2))
     for i in range(0,len(listorigin)):
-        ratio = listorigin[i][1]/listorigin[i][2]
+        # Kolom ketiga: harga, kolom keempat: rating, kolom kelima: Jumlah terjual
+        ratio = float(listorigin[i][2])*float(listorigin[i][3])/float(listorigin[i][1])
         array = np.array([listorigin[i][0],ratio])
         listresult = np.append(listresult,[array],axis=0)
-
     return listresult
 
 def sortarrayasc(array):
@@ -59,5 +74,3 @@ def sortarraydesc(array):
     x = np.array(array)
     sorted_array = x[x[:, 1].argsort()[::-1]]
     return sorted_array
-
-#print(sortarraydesc(getRating("restoran")))
