@@ -11,7 +11,7 @@ while(run):
     print("Apakah Anda ingin membatasi jumlah menu yang ingin dipesan?")
     print("1. Ya, saya ingin membatasinya")
     print("2. Tidak, pesan sebanyak-banyaknya")
-    inp = input()
+    inp = int(input())
     print()
 
     countOrang = 0
@@ -41,7 +41,6 @@ while(run):
     inp = int(input())
     budget = int(input("Tentukan budget anda: "))
     if (inp == 1):
-        budget = int(input("Tentukan budget anda: "))
         listRecommendation, totalprice = greedyByPrice(file,budget,countOrang,avoidIngredients,max)
         print("Berikut ini adalah menu yang kami rekomendasikan berdasarkan masukan Anda")
         printMenu(listRecommendation)
@@ -70,7 +69,7 @@ while(run):
         print("Berikut ini adalah menu yang kami rekomendasikan berdasarkan masukan Anda")
         printMenu(listRecommendation)
         print()
-        print(f"Dengan total harga {totalprice} dan kalori total {ratio}")
+        print(f"Dengan total harga {totalprice}")
     else:
         listRecommendation, totalprice = randomrecommendation(file,budget,countOrang,avoidIngredients,max)
         print("Berikut ini adalah menu yang kami rekomendasikan berdasarkan masukan Anda")

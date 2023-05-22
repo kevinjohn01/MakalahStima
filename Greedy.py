@@ -49,7 +49,6 @@ def greedyByRating(filename, budget, totalparticipant, listAvoidIngredient,max):
     maxnow = max
 
     listratingsort = sortarraydesc(listrating)
-    print(listratingsort)
     i = 0
     while(totalparticipant > 0 and totalprice < budget):
         menu = listratingsort[i][0]
@@ -150,7 +149,6 @@ def greedyByAll(filename, budget, totalparticipant, listAvoidIngredient,max):
     maxnow = max
 
     listratiosort = sortarraydesc(listratio)
-    print(listratiosort)
     i = 0
     while(totalparticipant > 0 and totalprice < budget):
         menu = listratiosort[i][0]

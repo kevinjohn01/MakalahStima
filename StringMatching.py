@@ -30,6 +30,6 @@ def boyermoore(text,pattern):
                 else:
                     positionInText += patternlen - (lo+1)
                 positionInPattern = patternlen-1
-    return -1
+    return -1 #tidak ditemukan
 
         
